@@ -6,12 +6,12 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.camunda.community.extension.name</groupId>
-  <artifactId>give-me-a-name</artifactId>
+  <groupId>org.camunda.community.zeebe.docker.multiarch</groupId>
+  <artifactId>zeebe-docker-multiarch</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>give-me-a-name</name>
+  <name>zeebe-docker-multiarch</name>
 
   <scm>
     <url>https://github.com/camunda-community-hub/maven-template</url>
@@ -34,6 +34,7 @@
     <maven.version>3.0</maven.version>
 
     <version.junit>5.8.2</version.junit>
+    <version.zeebe>1.2.11</version.zeebe>
 
     <plugin.version.surefire>3.0.0-M5</plugin.version.surefire>
     <plugin.version.javadoc>3.3.2</plugin.version.javadoc>
@@ -50,6 +51,17 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+      <dependency>
+        <groupId>org.assertj</groupId>
+        <artifactId>assertj-core</artifactId>
+        <version>3.22.0</version>
+      </dependency>
+      <dependency>
+        <groupId>io.camunda</groupId>
+        <artifactId>camunda-cloud-zeebe</artifactId>
+        <version>${version.zeebe}</version>
+        <type>tar.gz</type>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -57,13 +69,18 @@
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <version>3.22.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.camunda</groupId>
+      <artifactId>camunda-cloud-zeebe</artifactId>
+      <scope>provided</scope>
+      <type>tar.gz</type>
     </dependency>
   </dependencies>
 
@@ -150,6 +167,26 @@
           </execution>
         </executions>
       </plugin>
+
+      <!-- copy deps to the target folder -->
+      <plugin>
+      <artifactId>maven-dependency-plugin</artifactId>
+      <executions>
+        <execution>
+          <phase>package</phase>
+
+          <goals>
+            <goal>copy-dependencies</goal>
+          </goals>
+
+          <configuration>
+            <outputDirectory>${targetdirectory}</outputDirectory>
+            <includeTypes>tar.gz</includeTypes>
+            <excludeTransitive>true</excludeTransitive>
+          </configuration>
+        </execution>
+      </executions>
+    </plugin>
     </plugins>
   </build>
 
