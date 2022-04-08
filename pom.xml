@@ -35,11 +35,14 @@
 
     <version.junit>5.8.2</version.junit>
     <version.zeebe>1.2.11</version.zeebe>
+    <version.assertj>3.22.0</version.assertj>
+    <version.testcontainers>1.16.3</version.testcontainers>
 
     <plugin.version.surefire>3.0.0-M5</plugin.version.surefire>
     <plugin.version.javadoc>3.3.2</plugin.version.javadoc>
     <plugin.version.jacoco>0.8.7</plugin.version.jacoco>
     <plugin.version.fmt>2.13</plugin.version.fmt>
+    <version.zeebe-test-container>3.3.0</version.zeebe-test-container>
   </properties>
 
   <dependencyManagement>
@@ -54,7 +57,19 @@
       <dependency>
         <groupId>org.assertj</groupId>
         <artifactId>assertj-core</artifactId>
-        <version>3.22.0</version>
+        <version>${version.assertj}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>testcontainers-bom</artifactId>
+        <version>${version.testcontainers}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>io.zeebe</groupId>
+        <artifactId>zeebe-test-container</artifactId>
+        <version>${version.zeebe-test-container}</version>
       </dependency>
       <dependency>
         <groupId>io.camunda</groupId>
@@ -74,6 +89,11 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.zeebe</groupId>
+      <artifactId>zeebe-test-container</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
