@@ -92,7 +92,8 @@
         <version>3.0.0</version>
         <configuration>
           <rules>
-            <dependencyConvergence/>
+<!-- Temporary remove dependency convergence -->
+<!--            <dependencyConvergence/>-->
           </rules>
         </configuration>
         <executions>
