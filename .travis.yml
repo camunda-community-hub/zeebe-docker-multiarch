@@ -1,2 +1,13 @@
+dist: focal
 language: java
 jdk: openjdk-11
+
+services:
+  - docker
+
+before_install:
+  - docker version
+  - docker buildx version
+
+before_script:
+  - docker buildx build --no-cache --platform linux/arm64,linux/amd64 --build-arg DISTBALL=target/camunda-cloud-zeebe*.tar.gz -t aivinog1/zeebe-multiarch:1.2.11 --target app .
