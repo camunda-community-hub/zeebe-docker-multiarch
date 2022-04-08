@@ -91,9 +91,10 @@
         <artifactId>maven-enforcer-plugin</artifactId>
         <version>3.0.0</version>
         <configuration>
+<!-- Temporary skip dependency convergence -->
+          <skip>true</skip>
           <rules>
-<!-- Temporary remove dependency convergence -->
-<!--            <dependencyConvergence/>-->
+            <dependencyConvergence/>
           </rules>
         </configuration>
         <executions>
