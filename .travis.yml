@@ -16,6 +16,8 @@ before_install:
   - sudo apt-get install docker-ce docker-ce-cli containerd.io
   - docker version
   - docker buildx version
+  - uname -p
+  - lscpu
 
 script:
   - ./mvnw package -DskipTests=true -Dmaven.javadoc.skip=true -B -V
