@@ -22,3 +22,9 @@ script:
   - docker buildx create --use
   - docker buildx build --no-cache --load --build-arg DISTBALL=target/dependency/camunda-cloud-zeebe-*.tar.gz -t aivinog1/zeebe-multiarch:test-image --target app .
   - ./mvnw test -B
+
+deploy:
+  provider: script
+  script: "bash travis-ci-deploy.sh"
+  on:
+    tags: true
