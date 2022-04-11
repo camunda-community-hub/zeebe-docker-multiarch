@@ -18,7 +18,7 @@ before_install:
   - docker buildx version
 
 script:
-  - mvn package -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+  - ./mvnw package -DskipTests=true -Dmaven.javadoc.skip=true -B -V
   - docker buildx create --use
-  - docker buildx build --no-cache --build-arg DISTBALL=target/dependency/camunda-cloud-zeebe-*.tar.gz -t aivinog1/zeebe-multiarch:test-image --target app .
-  - mvn test -B
+  - docker buildx build --no-cache --load --build-arg DISTBALL=target/dependency/camunda-cloud-zeebe-*.tar.gz -t aivinog1/zeebe-multiarch:test-image --target app .
+  - ./mvnw test -B
