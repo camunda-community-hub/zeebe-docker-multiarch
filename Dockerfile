@@ -5,8 +5,7 @@ FROM alpine:latest as builder
 ARG DISTBALL
 
 ENV TMP_ARCHIVE=/tmp/zeebe.tar.gz \
-    TMP_DIR=/tmp/zeebe \
-    TINI_VERSION=v0.19.0
+    TMP_DIR=/tmp/zeebe
 
 COPY ${DISTBALL} ${TMP_ARCHIVE}
 
@@ -15,7 +14,7 @@ RUN mkdir -p ${TMP_DIR} && \
     # already create volume dir to later have correct rights
     mkdir ${TMP_DIR}/data
 
-RUN apk add --no-cache tini
+RUN apk add --no-cache tini-static && cp /sbin/tini-static ${TMP_DIR}/bin/tini-static
 
 COPY docker/utils/startup.sh ${TMP_DIR}/bin/startup.sh
 RUN chmod +x -R ${TMP_DIR}/bin/
@@ -52,4 +51,4 @@ RUN groupadd -g 1000 zeebe && \
 COPY --from=builder --chown=1000:0 /tmp/zeebe/bin/startup.sh /usr/local/bin/startup.sh
 COPY --from=builder --chown=1000:0 /tmp/zeebe ${ZB_HOME}
 
-ENTRYPOINT ["tini", "--", "/usr/local/bin/startup.sh"]
+ENTRYPOINT ["tini-static", "--", "/usr/local/bin/startup.sh"]
