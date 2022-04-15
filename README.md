@@ -1,55 +1,28 @@
-[![Community badge: Incubating](https://img.shields.io/badge/Lifecycle-Incubating-blue)](https://github.com/Camunda-Community-Hub/community/blob/main/extension-lifecycle.md#incubating-)
+[![](https://img.shields.io/badge/Lifecycle-Proof%20of%20Concept-blueviolet)](https://github.com/Camunda-Community-Hub/community/blob/main/extension-lifecycle.md#proof-of-concept-)
 [![Community extension badge](https://img.shields.io/badge/Community%20Extension-An%20open%20source%20community%20maintained%20project-FF4700)](https://github.com/camunda-community-hub/community)
 
-# maven-template
+# Zeebe Docker Multiarch
 
-Empty maven project with defaults that incorporates Camunda Community Hub best practices.
+## Motivation
+Since the Zeebe project [doesn't provide Docker images for ARM architectures](https://github.com/camunda/zeebe/issues/6155) I've decided to build it myself.
 
 ## Usage
 
-* Use this as a template for new Camunda Community Hub
-  projects. (https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-from-a-template)
-* Change names and URLs in `pom.xml`
-  * `groupId`/`arrtifactId`
-  ```
-  <groupId>org.camunda.community.extension.name</groupId>
-  <artifactId>give-me-a-name</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>jar</packaging>
-  ```
-  * URLs
-  ```
-  <scm>
-    <url>https://github.com/camunda-community-hub/maven-template</url>
-    <connection>scm:git:git@github.com:camunda-community-hub/maven-template.git</connection>
-    <developerConnection>scm:git:git@github.com:camunda-community-hub/maven-tenmplate.git
-    </developerConnection>
-    <tag>HEAD</tag>
-  </scm>
-  ```
-* Add contribution guide to the repo (
-  e.g. [Contributing to this project](https://gist.github.com/jwulf/2c7f772570bfc8654b0a0a783a3f165e) )
-* Select desired license and exchange `LICENSE` file
+To use it you just need to replace the `camunda/zeebe` docker image name with `aivinog1/zeebe-multiarch` with the proper(for the most cases - same) version.
 
-## Features
+## Version matrix
+This is still in progress. On one hand: I want that version mapping between Zeebe and this project should be as easy as possible (this project version should be mapped to the same version in the Zeebe project), but I'm considering the cases when I need to add some functionality, or patch version, for example.
+Also, I don't want to shift from the SemVer. So I've decided to stick with the same version, with an optional `-x` suffix, where `x` - positive number, describing the current patch version.
 
-- IDE integration
-  - https://editorconfig.org/
-- GitHub Integration
-  - Dependabot enabled for Maven dependencies
-  - Backport action (https://github.com/zeebe-io/backport-action)
-- Maven POM
-  - Release to Maven, Nexus and GitHub
-  - Google Code Formatter
-  - JUnit 5
-  - AssertJ
-  - Surefire Plugin
-  - JaCoCo Plugin (test coverage)
-  - flaky test extractor (https://github.com/zeebe-io/flaky-test-extractor-maven-plugin)
+| Zeebe Version | Project version |
+|---------------|-----------------|
+| 1.2.11        | 1.2.11          |
 
-## Versions
-
-Different versions are represented in different branches
-
-- `main` - Java 11
-
+## How to build
+1. You have to have:
+   1. JDK 11
+   2. Docker
+   3. [Buildx](https://docs.docker.com/buildx/working-with-buildx/) with prepared environment for multiarch builds (i.e. `docker buildx create --use`)
+2. Build the project (note: you can't run tests until you build a multiplatform image) `./mvnw clean verify -DskipTests`
+3. Build image for tests: `docker buildx build --no-cache --load --build-arg DISTBALL=target/dependency/camunda-cloud-zeebe-*.tar.gz -t aivinog1/zeebe-multiarch:test-image --target app .`
+4. Run tests: `./mvnw verify`
