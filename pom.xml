@@ -42,7 +42,7 @@
     <plugin.version.javadoc>3.3.2</plugin.version.javadoc>
     <plugin.version.jacoco>0.8.7</plugin.version.jacoco>
     <plugin.version.fmt>2.13</plugin.version.fmt>
-    <version.zeebe-test-container>3.3.0</version.zeebe-test-container>
+    <version.zeebe-test-container>3.6.0</version.zeebe-test-container>
   </properties>
 
   <dependencyManagement>
